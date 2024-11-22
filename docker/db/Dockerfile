@@ -1,0 +1,10 @@
+ARG DB_IMAGE_FROM_PREFIX
+ARG POSTGRES_VERSION
+ARG ALPINE_VERSION
+FROM ${DB_IMAGE_FROM_PREFIX}postgres:${POSTGRES_VERSION}-alpine${ALPINE_VERSION}
+
+ENV POSTGRES_DB="main"
+ENV POSTGRES_USER="main"
+ENV POSTGRES_HOST_AUTH_METHOD="trust"
+
+COPY ["docker/db/config_set.sql", "/docker-entrypoint-initdb.d/01-config_set.sql"]

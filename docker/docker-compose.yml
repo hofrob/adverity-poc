@@ -1,0 +1,13 @@
+services:
+  db:
+    build:
+      context: ../
+      dockerfile: docker/db/Dockerfile
+      args:
+        POSTGRES_VERSION: ${POSTGRES_VERSION}
+        ALPINE_VERSION: ${ALPINE_VERSION}
+        DB_IMAGE_FROM_PREFIX: ${DB_IMAGE_FROM_PREFIX}
+    container_name: app-poc-db
+    ports:
+      - "5476:5432"
+    restart: always
