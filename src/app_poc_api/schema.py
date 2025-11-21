@@ -26,6 +26,14 @@ class TvshowOut(pydantic.BaseModel):
     episodes: list[EpisodeOut]
 
 
+class TvshowList(pydantic.BaseModel):
+    id: int
+    uuid: uuid.UUID
+    created_at: datetime.datetime
+    updated_at: datetime.datetime | None
+    name: str
+
+
 class EpisodeNew(pydantic.BaseModel):
     season: int
     episode: int

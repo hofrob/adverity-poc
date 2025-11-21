@@ -3,6 +3,7 @@ import http
 import logging
 
 import fastapi
+from fastapi.middleware import cors
 
 from app_poc import actions, database
 from app_poc.orm import core
@@ -27,6 +28,13 @@ def start() -> fastapi.FastAPI:
             "defaultModelRendering": "model",
         },
     )
+    app.add_middleware(
+        cors.CORSMiddleware,
+        allow_origins=["http://localhost:5173"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     app.include_router(router)
 
@@ -50,6 +58,11 @@ async def ping(request: fastapi.Request) -> dict:
 @router.get("/tvshow", response_model=schema.TvshowOut)
 async def get_tvshow(tvshow: depends.TvshowById):
     return tvshow
+
+
+@router.get("/tvshows", response_model=list[schema.TvshowList])
+async def list_tvshows(session: depends.Db):
+    return await actions.tv.list_all(session)
 
 
 @router.get("/tvshow/find")
@@ -78,6 +91,11 @@ async def create_episode(
         xfile.air_date,
         xfile.channels,
     )
+
+
+@router.get("/episode", response_model=schema.EpisodeOut)
+async def create_episode(episode: depends.EpisodeById) -> core.Episode:
+    return episode
 
 
 @router.post("/channel-details", response_model=list[schema.ChannelDetail])

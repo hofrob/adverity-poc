@@ -35,6 +35,17 @@ async def _tvshow_by_id(db: Db, tvshow_id: int) -> core.Tvshow:
 TvshowById = typing.Annotated[core.Tvshow, fastapi.Depends(_tvshow_by_id)]
 
 
+async def _episode_by_id(db: Db, episode_id: int) -> core.Episode:
+    async with db() as session, session.begin():
+        episode = await query.episode.get_by_id(session, episode_id)
+        await episode.awaitable_attrs.channels
+
+    return episode
+
+
+EpisodeById = typing.Annotated[core.Episode, fastapi.Depends(_episode_by_id)]
+
+
 async def _tvshow_by_name(db: Db, name: str) -> list[core.Tvshow]:
     async with db() as session, session.begin():
         tvshows = await query.tvshow.list_by_name(session, name)

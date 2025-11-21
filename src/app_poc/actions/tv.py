@@ -16,6 +16,11 @@ async def get(session: database.SessionFactory, tvshow_id: int) -> core.Tvshow:
         return tvshow
 
 
+async def list_all(session: database.SessionFactory) -> core.Tvshow:
+    async with session() as session, session.begin():
+        return await query.tvshow.list_all(session)
+
+
 async def update(session: database.SessionFactory, tvshow: core.Tvshow, name) -> None:
     async with session() as session, session.begin():
         session.add(tvshow)
