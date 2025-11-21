@@ -12,5 +12,5 @@ db_migrate:
 	@until uv run alembic upgrade heads; do echo "migration failed. Retrying..."; sleep 1; done
 
 serve:
-	@echo docs: http://127.0.0.1:8010/docs
-	uv run uvicorn --port 8010 "app_poc_api.main:start" --reload --use-colors --factory
+	./serve.sh
+
